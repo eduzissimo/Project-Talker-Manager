@@ -38,8 +38,40 @@ const getDataById = async (req, res) => {
   res.status(200).json(foundTalker);
 };
 
+const updateTalker = async (req, res) => {
+  const { id } = req.params;
+  const data = await readJsonData(talkersPath);
+  const { name, age, talk } = req.body;
+  const updatedTalker = {
+    id: Number(id),
+    name,
+    age,
+    talk,
+  };
+  const talkerIndex = data.findIndex((talker) => talker.id === Number(id));
+  if (talkerIndex === -1) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  data[talkerIndex] = updatedTalker;
+  await writeJsonData(talkersPath, data);
+  res.status(200).json(updatedTalker);
+};
+
+const filterTalker = async (req, res) => {
+  const { q } = req.query;
+  if (!q || q.trim() === '') {
+    return getAllData(req, res);
+  }
+  const data = await readJsonData(talkersPath);
+  const filteredTalkers = data.filter((talker) =>
+    talker.name.toLowerCase().includes(q.toLowerCase()));
+  res.status(200).json(filteredTalkers);
+};
+
 module.exports = {
   getAllData,
   getDataById,
   newTalkers,
+  updateTalker,
+  filterTalker,
 };

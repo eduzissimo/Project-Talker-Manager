@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 
 const TalkersData = require('../utils/addTalkersData');
+const { deleteTalker } = require('../utils/deleteTalkers');
+
 const { validateTalkerToken,
   validateTalkerName,
   validateTalkerAge,
@@ -18,5 +20,13 @@ router.post('/',
   validateTalkerTalkWatchedAt,
   validateTalkerTalkRate,
   TalkersData.newTalkers);
+router.put('/:id',
+  validateTalkerToken,
+  validateTalkerName,
+  validateTalkerAge,
+  validateTalkerTalkWatchedAt,
+  validateTalkerTalkRate,
+  TalkersData.updateTalker);
+router.delete('/:id', validateTalkerToken, deleteTalker);
 
 module.exports = router;
