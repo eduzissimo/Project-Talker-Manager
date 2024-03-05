@@ -1,8 +1,7 @@
 const path = require('path');
-const readJsonData = require('./fs/readJsonData');
-const writeJsonData = require('./fs/writeJsonData');
+const { readJsonData, writeJsonData } = require('../fs/jsonDataUtils');
 
-const talkersPath = path.join(__dirname, '..', 'talker.json');
+const talkersPath = path.join(__dirname, '..', '..', 'talker.json');
 
 const deleteTalker = async (req, res) => {
   const { id } = req.params;
@@ -19,6 +18,4 @@ const deleteTalker = async (req, res) => {
   res.status(204).send();
 };
 
-module.exports = {
-  deleteTalker,
-};
+module.exports = { deleteTalker };

@@ -2,31 +2,45 @@ const express = require('express');
 
 const router = express.Router();
 
-const TalkersData = require('../utils/addTalkersData');
-const { deleteTalker } = require('../utils/deleteTalkers');
+const {
+  getAllData,
+  searchTalker,
+  getDataById,
+  newTalkers,
+  updateTalker,
+} = require('../utils/talkers/addTalkersData');
 
-const { validateTalkerToken,
-  validateTalkerName,
-  validateTalkerAge,
-  validateTalkerTalkWatchedAt,
-  validateTalkerTalkRate } = require('../middlewares/validateTalkers');
+const { deleteTalker } = require('../utils/talkers/deleteTalkers');
 
-router.get('/', TalkersData.getAllData);
-router.get('/:id', TalkersData.getDataById);
-router.post('/',
+const {
   validateTalkerToken,
   validateTalkerName,
   validateTalkerAge,
   validateTalkerTalkWatchedAt,
   validateTalkerTalkRate,
-  TalkersData.newTalkers);
-router.put('/:id',
+} = require('../middlewares/talkers/validateTalkers');
+
+router.get('/', getAllData);
+router.get('/search', validateTalkerToken, searchTalker);
+router.get('/:id', getDataById);
+router.post(
+  '/',
   validateTalkerToken,
   validateTalkerName,
   validateTalkerAge,
   validateTalkerTalkWatchedAt,
   validateTalkerTalkRate,
-  TalkersData.updateTalker);
+  newTalkers,
+);
+router.put(
+  '/:id',
+  validateTalkerToken,
+  validateTalkerName,
+  validateTalkerAge,
+  validateTalkerTalkWatchedAt,
+  validateTalkerTalkRate,
+  updateTalker,
+);
 router.delete('/:id', validateTalkerToken, deleteTalker);
 
 module.exports = router;

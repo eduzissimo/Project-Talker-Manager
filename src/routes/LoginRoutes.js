@@ -1,9 +1,9 @@
 const express = require('express');
 
 const router = express.Router();
-const validateLogin = require('../middlewares/validateLogins');
+const validateLogin = require('../middlewares/login/validateLogins');
 
-const LoginData = require('../utils/addLoginData');
+const LoginData = require('../utils/login/addLoginData');
 
 router.post('/', validateLogin, LoginData.tokenLogin);
 

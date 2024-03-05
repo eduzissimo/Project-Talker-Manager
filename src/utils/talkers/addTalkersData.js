@@ -1,15 +1,10 @@
 const path = require('path');
-const readJsonData = require('./fs/readJsonData');
-const writeJsonData = require('./fs/writeJsonData');
+const { readJsonData, writeJsonData } = require('../fs/jsonDataUtils');
 
-const talkersPath = path.join(__dirname, '..', 'talker.json');
+const talkersPath = path.join(__dirname, '..', '..', 'talker.json');
 
 const getAllData = async (_req, res) => {
   const data = await readJsonData(talkersPath);
-
-  if (data.length === 0) {
-    return res.status(200).json([]);
-  }
   res.status(200).json(data);
 };
 
@@ -57,14 +52,12 @@ const updateTalker = async (req, res) => {
   res.status(200).json(updatedTalker);
 };
 
-const filterTalker = async (req, res) => {
+const searchTalker = async (req, res) => {
   const { q } = req.query;
-  if (!q || q.trim() === '') {
-    return getAllData(req, res);
-  }
   const data = await readJsonData(talkersPath);
-  const filteredTalkers = data.filter((talker) =>
-    talker.name.toLowerCase().includes(q.toLowerCase()));
+  const filteredTalkers = q
+    ? data.filter((talker) => talker.name.toLowerCase().includes(q.toLowerCase()))
+    : data;
   res.status(200).json(filteredTalkers);
 };
 
@@ -73,5 +66,5 @@ module.exports = {
   getDataById,
   newTalkers,
   updateTalker,
-  filterTalker,
+  searchTalker,
 };
