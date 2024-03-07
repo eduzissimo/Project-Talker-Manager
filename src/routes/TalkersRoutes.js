@@ -8,6 +8,7 @@ const {
   getDataById,
   newTalkers,
   updateTalker,
+  TalkerDB,
 } = require('../utils/talkers/addTalkersData');
 
 const { deleteTalker } = require('../utils/talkers/deleteTalkers');
@@ -21,6 +22,7 @@ const {
 } = require('../middlewares/talkers/validateTalkers');
 
 router.get('/', getAllData);
+router.get('/db', TalkerDB);
 router.get('/search', validateTalkerToken, searchTalker);
 router.get('/:id', getDataById);
 router.post(

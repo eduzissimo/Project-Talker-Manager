@@ -1,5 +1,6 @@
 const path = require('path');
 const { readJsonData, writeJsonData } = require('../fs/jsonDataUtils');
+const connection = require('../../db/talkerConnection');
 
 const talkersPath = path.join(__dirname, '..', '..', 'talker.json');
 
@@ -61,10 +62,31 @@ const searchTalker = async (req, res) => {
   res.status(200).json(filteredTalkers);
 };
 
+const TalkerDB = async (_req, res) => {
+  try {
+    const conn = connection();
+    const [rows] = await conn.query('SELECT * FROM talkers');
+    const queryData = rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      age: row.age,
+      talk: {
+        watchedAt: row.talk_watched_at,
+        rate: row.talk_rate,
+      },
+    }));
+    res.status(200).json(queryData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erro interno no servidor' });
+  }
+};
+
 module.exports = {
   getAllData,
   getDataById,
   newTalkers,
   updateTalker,
   searchTalker,
+  TalkerDB,
 };
